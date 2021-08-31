@@ -28,8 +28,8 @@
 			},
 			updateList() {
 				if (this.display_ids) {
-					this.local_list = this.list.filter((item) =>
-						this.display_ids.includes(item.id)
+					this.local_list = this.display_ids.map((id) =>
+						this.list.find((item) => item.id == id)
 					);
 					return;
 				}

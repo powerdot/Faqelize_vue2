@@ -82,7 +82,8 @@
 				</div>
 				<div class="area" v-if="selected_area == 'pinned'">
 					<results
-						:list="database.filter((x) => x.pinned)"
+						:display_ids="pinned_ids"
+						:list="database"
 						:nothing_text="$t('NO_PINNED')"
 						@pin="pin"
 					/>
@@ -234,10 +235,17 @@
 				this.selected_area = area;
 			},
 			pin({ id, pinned }) {
-				console.log(id, pinned);
 				this.database[id].pinned = pinned;
-				let pinned_ids = this.database.filter((x) => x.pinned).map((x) => x.id);
-				localStorage.setItem(localstorage_pinned_key, JSON.stringify(pinned_ids));
+				if (pinned) {
+					if (this.pinned_ids.includes(id)) return;
+					this.pinned_ids.push(id);
+				} else {
+					this.pinned_ids = this.pinned_ids.filter((x) => x != id);
+				}
+				localStorage.setItem(
+					localstorage_pinned_key,
+					JSON.stringify(this.pinned_ids)
+				);
 			},
 			clearSearchQuery() {
 				this.search_query = "";
