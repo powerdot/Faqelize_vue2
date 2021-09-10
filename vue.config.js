@@ -19,7 +19,6 @@ module.exports = {
                 stringArrayThreshold: 0.75,
                 deadCodeInjection: true,
                 deadCodeInjectionThreshold: 0.4,
-                debugProtection: true,
                 simplify: true,
                 splitStrings: true,
                 splitStringsChunkLength: 4,
