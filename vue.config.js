@@ -29,8 +29,7 @@ module.exports = {
         ]
     },
 
-
-
-
+    // output: ./docs
+    outputDir: 'docs',
 };
 
