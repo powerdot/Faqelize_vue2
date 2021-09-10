@@ -29,67 +29,88 @@
 			</button>
 			<i18nSelect />
 		</div>
-		<div class="search_holder" v-if="!loading && password_applied">
-			<div class="menu">
-				<div
-					:class="{ menu_item: true, selected: selected_area == 'all' }"
-					@click="change_area('all')"
-				>
-					{{ $t("ALL_DATABASE") }}
-				</div>
-				<div
-					:class="{ menu_item: true, selected: selected_area == 'searchbar' }"
-					@click="change_area('searchbar')"
-				>
-					{{ $t("SEARCHBAR") }}
-				</div>
-				<div
-					:class="{ menu_item: true, selected: selected_area == 'pinned' }"
-					@click="change_area('pinned')"
-				>
-					{{ $t("PINNED") }}
+		<div :class="{ sideholder: true, showrs }">
+			<div class="leftside">
+				<div class="search_holder" v-if="!loading && password_applied">
+					<div class="menu">
+						<div
+							:class="{ menu_item: true, selected: selected_area == 'all' }"
+							@click="change_area('all')"
+						>
+							{{ $t("ALL_DATABASE") }}
+						</div>
+						<div
+							:class="{
+								menu_item: true,
+								selected: selected_area == 'searchbar',
+							}"
+							@click="change_area('searchbar')"
+						>
+							{{ $t("SEARCHBAR") }}
+						</div>
+						<div
+							:class="{ menu_item: true, selected: selected_area == 'pinned' }"
+							@click="change_area('pinned')"
+						>
+							{{ $t("PINNED") }}
+						</div>
+					</div>
+
+					<div class="areas">
+						<div class="area" v-if="selected_area == 'all'">
+							<results
+								:list="database"
+								:nothing_text="$t('DATABASE_IS_EMPTY')"
+								@pin="pin"
+							/>
+						</div>
+						<div class="area" v-if="selected_area == 'searchbar'">
+							<input
+								type="text"
+								:placeholder="$t('SEARCH')"
+								@keyup="search"
+								v-model="search_query"
+							/>
+							<button
+								v-if="search_query != ''"
+								class="clear"
+								@click="clearSearchQuery"
+							>
+								<i class="bi bi-x"></i>
+							</button>
+							<results
+								:display_ids="results.map((x) => x.id)"
+								:list="database"
+								:nothing_text="search_query ? $t('NO_RESULTS') : ''"
+								@pin="pin"
+							/>
+						</div>
+						<div class="area" v-if="selected_area == 'pinned'">
+							<results
+								:display_ids="pinned_ids"
+								:list="database"
+								:nothing_text="$t('NO_PINNED')"
+								@pin="pin"
+							/>
+						</div>
+					</div>
 				</div>
 			</div>
-
-			<div class="areas">
-				<div class="area" v-if="selected_area == 'all'">
-					<results
-						:list="database"
-						:nothing_text="$t('DATABASE_IS_EMPTY')"
-						@pin="pin"
-					/>
-				</div>
-				<div class="area" v-if="selected_area == 'searchbar'">
-					<input
-						type="text"
-						:placeholder="$t('SEARCH')"
-						@keyup="search"
-						v-model="search_query"
-					/>
-					<button
-						v-if="search_query != ''"
-						class="clear"
-						@click="clearSearchQuery"
-					>
-						<i class="bi bi-x"></i>
-					</button>
-					<results
-						:display_ids="results.map((x) => x.id)"
-						:list="database"
-						:nothing_text="search_query ? $t('NO_RESULTS') : ''"
-						@pin="pin"
-					/>
-				</div>
-				<div class="area" v-if="selected_area == 'pinned'">
-					<results
-						:display_ids="pinned_ids"
-						:list="database"
-						:nothing_text="$t('NO_PINNED')"
-						@pin="pin"
-					/>
-				</div>
+			<div class="rightside">
+				<results
+					:display_ids="pinned_ids"
+					:list="database"
+					:nothing_text="$t('NO_PINNED')"
+					@pin="pin"
+				/>
 			</div>
 		</div>
+		<button
+			@click="showrs = !showrs"
+			style="position: fixed; right: 0; bottom: 0"
+		>
+			open
+		</button>
 	</div>
 </template>
 
@@ -135,6 +156,7 @@
 		},
 		data() {
 			return {
+				showrs: false,
 				results: [],
 				database: [],
 				search_query: "",
@@ -242,6 +264,9 @@
 				} else {
 					this.pinned_ids = this.pinned_ids.filter((x) => x != id);
 				}
+
+				this.$forceUpdate();
+				console.log(this.pinned_ids);
 				localStorage.setItem(
 					localstorage_pinned_key,
 					JSON.stringify(this.pinned_ids)
@@ -259,6 +284,36 @@
 </script>
 
 <style lang="scss" scoped>
+	.sideholder {
+		display: flex;
+		.leftside {
+			width: 100%;
+			transition: 1s ease-in-out all;
+		}
+		.rightside {
+			width: 0;
+			overflow: hidden;
+			background: #fff;
+			transition: 1s ease-in-out all;
+			position: fixed;
+			top: 0;
+			right: 0;
+			height: 100vh;
+			.results {
+				margin-left: 30px;
+				width: 320px;
+			}
+		}
+		&.showrs {
+			.rightside {
+				width: 350px;
+			}
+			.leftside {
+				width: calc(100% - 350px);
+			}
+		}
+	}
+
 	.loading_holder {
 		text-align: left;
 		position: absolute;
