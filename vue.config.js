@@ -20,8 +20,8 @@ module.exports = {
                 deadCodeInjection: true,
                 deadCodeInjectionThreshold: 0.4,
                 simplify: true,
-                splitStrings: true,
-                splitStringsChunkLength: 4,
+                // splitStrings: true,
+                // splitStringsChunkLength: 4,
                 renameGlobals: true,
                 renameProperties: true,
             })
