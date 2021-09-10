@@ -31,5 +31,9 @@ module.exports = {
 
     // output: ./docs
     outputDir: 'docs',
+
+    // relative link for assets
+    publicPath: './',
+
 };
 
