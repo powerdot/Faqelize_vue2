@@ -12,7 +12,7 @@ module.exports = {
 
     // relative link for assets
     publicPath: process.env.NODE_ENV === 'production'
-        ? '/Faquelize/'
+        ? '/Faqelize/'
         : '/'
 
 };
