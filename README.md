@@ -1,5 +1,8 @@
 # faqelize
 
+Demo: https://ilyich.ru/Faqelize/
+Password: 1234
+
 ## Project setup
 ```
 npm install

@@ -10,24 +10,6 @@ var WebpackObfuscator = require('webpack-obfuscator');
  */
 module.exports = {
 
-    // webpack obfuscation plugin
-    configureWebpack: {
-        plugins: [
-            new WebpackObfuscator({
-                // rotateStringArray: true,
-                // stringArray: true,
-                // stringArrayThreshold: 0.75,
-                // deadCodeInjection: true,
-                // deadCodeInjectionThreshold: 0.4,
-                // simplify: true,
-                // splitStrings: true,
-                // splitStringsChunkLength: 4,
-                // renameGlobals: true,
-                // renameProperties: true,
-            })
-        ]
-    },
-
     // output: ./docs
     outputDir: 'docs',
 
