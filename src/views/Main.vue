@@ -105,12 +105,6 @@
 				/>
 			</div>
 		</div>
-		<button
-			@click="showrs = !showrs"
-			style="position: fixed; right: 0; bottom: 0"
-		>
-			open
-		</button>
 	</div>
 </template>
 
