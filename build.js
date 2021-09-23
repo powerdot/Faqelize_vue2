@@ -22,7 +22,12 @@ function askQuestion(query) {
     switch (process.argv[2]) {
         case 'build':
             let algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
-            let password = await askQuestion("Enter the password: ")
+            let password = "";
+            if (process.argv[3]) {
+                password = process.argv[3];
+            } else {
+                password = await askQuestion("Enter the password: ")
+            }
             let key = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32);
             let text = fs.readFileSync(path.resolve(__dirname, "public/database.json"), "utf8");
             let cipher = crypto.createCipher(algorithm, key);
