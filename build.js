@@ -31,8 +31,8 @@ function askQuestion(query) {
             break;
 
         case 'clean':
-            if (fs.existsSync(path.resolve(__dirname, "dist/database.json"))) {
-                fs.unlinkSync(path.resolve(__dirname, "dist/database.json"));
+            if (fs.existsSync(path.resolve(__dirname, "docs/database.json"))) {
+                fs.unlinkSync(path.resolve(__dirname, "docs/database.json"));
             }
             break;
 
