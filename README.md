@@ -1,7 +1,7 @@
-# faqelize
+![Banner](assets/banner.jpg)
 
-Demo: https://ilyich.ru/Faqelize/
-Password: 1234
+
+🖤 Try it out: [Faqelize Demo](https://ilyich.ru/Faqelize/) with password: `1234`
 
 ## Project setup
 ```
