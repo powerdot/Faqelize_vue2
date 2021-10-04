@@ -17,4 +17,8 @@
 	body {
 		margin: 0;
 	}
+	// no scroll class
+	.no-scroll {
+		overflow: hidden;
+	}
 </style>

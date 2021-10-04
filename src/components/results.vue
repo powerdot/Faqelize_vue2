@@ -3,13 +3,30 @@
 		<div class="no_results" v-if="local_list.length == 0">
 			{{ nothing_text }}
 		</div>
-		<div class="result" v-for="item of local_list" :key="'result' + item.id">
-			<button :class="{ pin: true, pinned: item.pinned }" @click="pin(item)">
+		<div
+			class="result"
+			v-for="item of local_list"
+			:key="'result' + item.id"
+			@click="open(item)"
+		>
+			<button
+				:class="{ pin: true, pinned: item.pinned }"
+				@click.stop="pin(item)"
+				v-if="usePins"
+			>
 				<i :class="['bi', item.pinned ? 'bi-star-fill' : 'bi-star']"></i>
 			</button>
-			<b>{{ item.q }}</b>
-			<br />
-			{{ item.a }}
+			<div class="title">
+				{{ item.q }}
+			</div>
+			<span class="answer">
+				{{ typeof item.a == "string" ? item.a : item.a.subText || "" }}
+			</span>
+			<template v-if="typeof item.a == 'object'">
+				<template v-if="item.a.type == 'page'">
+					<i class="bi bi-arrow-up-right-square page_result"></i>
+				</template>
+			</template>
 		</div>
 	</div>
 </template>
@@ -19,6 +36,7 @@
 		props: ["display_ids", "list", "nothing_text"],
 		data() {
 			return {
+				usePins: false,
 				local_list: [],
 			};
 		},
@@ -35,8 +53,14 @@
 				}
 				this.local_list = this.list;
 			},
+			open(item) {
+				if (typeof item.a == "string") return;
+				if (item.a.type != "page") return;
+				this.$emit("open", item);
+			},
 		},
 		mounted() {
+			this.usePins = this.$faqelize.usePins;
 			this.updateList();
 		},
 		watch: {
@@ -61,19 +85,41 @@
 		}
 		.result {
 			background: #eee;
-			padding: 15px;
+			padding: 10px 15px;
 			margin-bottom: 5px;
 			text-align: left;
 			border-left: 2px solid #cccccc;
 			position: relative;
+			.title {
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+				padding-right: 16px;
+				font-weight: bold;
+			}
+			.answer {
+				white-space: pre-line;
+			}
 			.pin {
 				position: absolute;
-				left: -28px;
+				right: 8px;
 				top: 5px;
 				background: unset;
 				border: unset;
 				opacity: 0.5;
 				cursor: pointer;
+				color: black;
+				padding: 0;
+				outline: none;
+			}
+
+			.page_result {
+				position: absolute;
+				right: 8px;
+				bottom: 4px;
+				opacity: 0.2;
+				cursor: pointer;
+				font-size: 12px;
 			}
 			&:hover {
 				border-left-color: #3f51b5;
@@ -84,13 +130,43 @@
 					}
 				}
 				.pin.pinned:hover {
-					color: #e8c400;
+					color: #29388b;
+				}
+
+				.page_result {
+					opacity: 0.5;
+					&:hover {
+						opacity: 1;
+					}
 				}
 			}
 			.pin.pinned {
-				color: gold;
+				color: #3f51b5;
 				opacity: 1;
 			}
+		}
+	}
+</style>
+
+<style lang="scss" scoped>
+	// mobile media query
+	@media only screen and (max-width: 600px) {
+		.results .result .pin {
+			font-size: 20px;
+			padding: 0;
+		}
+		.results .result .pin.pinned {
+			color: #3f51b5;
+		}
+		.results .result:hover .pin.pinned:hover {
+			color: #3f51b5;
+		}
+		.results .result:hover {
+			border-left-color: #ccc;
+		}
+		.results .result .page_result {
+			font-size: 20px;
+			right: 10px;
 		}
 	}
 </style>

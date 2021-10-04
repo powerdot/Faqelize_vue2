@@ -1,15 +1,24 @@
 <template>
-	<div class="language_picker">
-		<select v-model="lang" @change="changeLanguage">
-			<option
-				v-for="lang in langs"
-				:value="lang.code"
-				:key="'locale-' + lang.code"
-			>
-				{{ lang.name }}
-			</option>
-		</select>
-		<div class="label">{{ $t("SELECT_LANG") }}</div>
+	<div v-if="activate">
+		<button class="globe" @click="show = !show">
+			<i class="bi bi-globe2"></i>
+		</button>
+
+		<div class="language_picker" :class="{ show }">
+			<button class="close" @click="show = false">
+				<i class="bi bi-x"></i>
+			</button>
+			<select v-model="lang" @change="changeLanguage">
+				<option
+					v-for="lang in langs"
+					:value="lang.code"
+					:key="'locale-' + lang.code"
+				>
+					{{ lang.name }}
+				</option>
+			</select>
+			<div class="label">{{ $t("SELECT_LANG") }}</div>
+		</div>
 	</div>
 </template>
 
@@ -19,6 +28,8 @@
 	export default {
 		data() {
 			return {
+				activate: false,
+				show: false,
 				lang: "en",
 				langs: [],
 				localeNames: {
@@ -39,6 +50,8 @@
 			};
 		},
 		mounted() {
+			this.activate = this.$faqelize.showLanguageSwitcher;
+
 			let avaliableLocales = this.$i18n.availableLocales;
 			for (let al of avaliableLocales) {
 				this.langs.push({
@@ -49,7 +62,11 @@
 
 			// localStorage local setting
 			let lang = localStorage.getItem(localstorage_password_locale);
-			this.lang = lang || this.$i18n.locale || this.$i18n.fallbackLocale;
+			this.lang =
+				lang ||
+				this.$faqelize.defaultLanguage ||
+				this.$i18n.locale ||
+				this.$i18n.fallbackLocale;
 
 			this.changeLanguage();
 		},
@@ -64,21 +81,86 @@
 
 <style lang="scss" scoped>
 	.language_picker {
-		// position: absolute;
-		// right: 40px;
-		// top: 60px;
 		width: 100%;
 		padding: 20px 0px;
 		border-radius: 20px;
 		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 		text-align: center;
 		background-color: #fff;
-		// width: 145px;
+		z-index: 2;
 		.label {
 			color: gray;
 			cursor: default;
 			font-size: 10px;
 			margin-top: 5px;
+		}
+	}
+
+	.globe {
+		display: none;
+	}
+
+	.close {
+		display: none;
+	}
+</style>
+
+<style lang="scss" scoped>
+	// mobile styles
+	@media (max-width: 1250px) {
+		.globe {
+			display: block;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			padding: 10px;
+			border-radius: 50%;
+			background-color: #fff;
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+			border: none;
+			color: black;
+			height: 40px;
+			width: 40px;
+			line-height: 20px;
+			i {
+				font-size: 20px;
+			}
+		}
+		.language_picker {
+			display: none;
+			position: absolute;
+			right: 0px;
+			top: 0px;
+			width: 100%;
+			padding: 20px 0px;
+			border-radius: 20px;
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+			text-align: center;
+			background-color: #fff;
+			.label {
+				color: gray;
+				cursor: default;
+				font-size: 10px;
+				margin-top: 5px;
+			}
+			&.show {
+				display: block;
+			}
+		}
+
+		.close {
+			display: block;
+			position: absolute;
+			padding: 0;
+			right: 10px;
+			top: 7px;
+			border-radius: 50%;
+			background-color: unset;
+			border: none;
+			color: black;
+			i {
+				font-size: 20px;
+			}
 		}
 	}
 </style>

@@ -3,6 +3,9 @@
 		<div class="loading_holder" v-if="loading && !database_not_found">
 			<loader />
 		</div>
+		<subPage ref="subPage" :pageTitle="pageTitle">
+			<component :is="pageToOpen" />
+		</subPage>
 		<div class="setup_database_holder" v-if="loading && database_not_found">
 			<h2>{{ $t("DATABASE_NOT_FOUND") }}</h2>
 			<p v-html="$t('DATABASE_SETUP')"></p>
@@ -40,17 +43,9 @@
 							{{ $t("ALL_DATABASE") }}
 						</div>
 						<div
-							:class="{
-								menu_item: true,
-								selected: selected_area == 'searchbar',
-							}"
-							@click="change_area('searchbar')"
-						>
-							{{ $t("SEARCHBAR") }}
-						</div>
-						<div
 							:class="{ menu_item: true, selected: selected_area == 'pinned' }"
 							@click="change_area('pinned')"
+							v-if="usePins"
 						>
 							{{ $t("PINNED") }}
 						</div>
@@ -58,39 +53,45 @@
 
 					<div class="areas">
 						<div class="area" v-if="selected_area == 'all'">
-							<results
-								:list="database"
-								:nothing_text="$t('DATABASE_IS_EMPTY')"
-								@pin="pin"
-							/>
-						</div>
-						<div class="area" v-if="selected_area == 'searchbar'">
 							<input
 								type="text"
 								:placeholder="$t('SEARCH')"
 								@keyup="search"
 								v-model="search_query"
 							/>
-							<button
-								v-if="search_query != ''"
-								class="clear"
-								@click="clearSearchQuery"
-							>
-								<i class="bi bi-x"></i>
-							</button>
-							<results
-								:display_ids="results.map((x) => x.id)"
-								:list="database"
-								:nothing_text="search_query ? $t('NO_RESULTS') : ''"
-								@pin="pin"
-							/>
+							<template v-if="!search_query">
+								<results
+									:list="database"
+									:nothing_text="$t('DATABASE_IS_EMPTY')"
+									@pin="pin"
+									@open="openItem"
+								/>
+							</template>
+							<template v-else>
+								<button
+									v-if="search_query != ''"
+									class="clear"
+									@click="clearSearchQuery"
+								>
+									<i class="bi bi-x"></i>
+								</button>
+								<results
+									:display_ids="results.map((x) => x.id)"
+									:list="database"
+									:nothing_text="search_query ? $t('NO_RESULTS') : ''"
+									@pin="pin"
+									@open="openItem"
+								/>
+							</template>
 						</div>
+						<div class="area" v-if="selected_area == 'searchbar'"></div>
 						<div class="area" v-if="selected_area == 'pinned'">
 							<results
 								:display_ids="pinned_ids"
 								:list="database"
 								:nothing_text="$t('NO_PINNED')"
 								@pin="pin"
+								@open="openItem"
 							/>
 						</div>
 					</div>
@@ -102,9 +103,11 @@
 					:list="database"
 					:nothing_text="$t('NO_PINNED')"
 					@pin="pin"
+					@open="openItem"
 				/>
 			</div>
 		</div>
+		<SuggestPWAInstall />
 	</div>
 </template>
 
@@ -119,6 +122,8 @@
 	import i18nSelect from "../components/i18n-select.vue";
 	import results from "../components/results.vue";
 	import loader from "../components/loader.vue";
+	import subPage from "../components/subPage.vue";
+	import SuggestPWAInstall from "../components/SuggestPWAInstall.vue";
 
 	function decryptDatabase(value, password) {
 		try {
@@ -147,6 +152,8 @@
 			i18nSelect,
 			results,
 			loader,
+			subPage,
+			SuggestPWAInstall,
 		},
 		data() {
 			return {
@@ -161,6 +168,9 @@
 				database_not_found: false,
 				selected_area: "all",
 				pinned_ids: [],
+				pageToOpen: "",
+				pageTitle: "",
+				usePins: false,
 			};
 		},
 		methods: {
@@ -191,6 +201,9 @@
 				miniSearch = new MiniSearch.default({
 					fields: ["q"],
 					storeFields: ["q", "a"],
+					searchOptions: {
+						fuzzy: 0.2,
+					},
 				});
 				miniSearch.addAll(database.value);
 
@@ -270,9 +283,16 @@
 				this.search_query = "";
 				this.search();
 			},
+			openItem(item) {
+				this.pageToOpen = item.a.page.toString();
+				this.$refs.subPage.open();
+				this.pageTitle = item.q;
+			},
 		},
 		mounted() {
+			this.usePins = this.$faqelize.usePins;
 			this.load();
+			console.log(this.$faqelize);
 		},
 	};
 </script>
@@ -341,7 +361,7 @@
 	}
 
 	.search_holder {
-		width: 80%;
+		width: 90%;
 		max-width: 900px;
 		margin: 0 auto;
 		margin-top: 40px;
@@ -408,8 +428,19 @@
 		outline: none;
 		cursor: pointer;
 		opacity: 0.5;
+		color: black;
 		&:hover {
 			opacity: 1;
+		}
+	}
+</style>
+
+<style lang="scss" scoped>
+	// mobile query
+	@media only screen and (max-width: 600px) {
+		.clear {
+			opacity: 1;
+			padding: 0;
 		}
 	}
 </style>
