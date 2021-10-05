@@ -9,12 +9,20 @@
 	export default {
 		name: "logout",
 		data() {
-			return {};
+			return {
+				show: false,
+			};
 		},
 		methods: {
 			logout() {
 				this.$emit("logout");
 			},
+		},
+		mounted() {
+			let isStandalone = window.navigator.standalone === true;
+			if (!(this.$faqelize.disableLogoutOnStandalone && isStandalone)) {
+				this.show = true;
+			}
 		},
 	};
 </script>

@@ -30,6 +30,9 @@ module.exports = {
     // Suggest install as app on mobile devices.
     installAsPWA: true,
 
+    // Disable logout if page works as PWA on smartphone.
+    disableLogoutOnStandalone: true,
+
     // Set logotype image.
     // Can be bool and string.
     // If string is empty - default logo from ./public/img/logo.png
@@ -54,4 +57,10 @@ module.exports = {
 
     // Determines URL parameter for logo.
     logoParameterKey: 'logo',
+
+    // Accept use database by URL parameter.
+    acceptDatabaseParameter: true,
+
+    // Determines URL parameter for database.
+    databaseParameterKey: 'db',
 };

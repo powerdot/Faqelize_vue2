@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "25b764441e4436e0e616",
-    "url": "/Faqelize/css/app.0428d529.css"
+    "revision": "50228e6c972e103d6603",
+    "url": "/Faqelize/css/app.2915c11a.css"
   },
   {
     "revision": "8f1b4b30fed047e2dec7",
@@ -28,12 +28,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Faqelize/img/logo.png"
   },
   {
-    "revision": "f183e9a0e46c3c180567f29ce6b0cae7",
+    "revision": "fbee31ddf40709af304afe6fd8fbf854",
     "url": "/Faqelize/index.html"
   },
   {
-    "revision": "25b764441e4436e0e616",
-    "url": "/Faqelize/js/app.85ff906b.js"
+    "revision": "50228e6c972e103d6603",
+    "url": "/Faqelize/js/app.a10d43d3.js"
   },
   {
     "revision": "8f1b4b30fed047e2dec7",

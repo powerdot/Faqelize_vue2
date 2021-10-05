@@ -245,7 +245,7 @@
 				let dbloc = "";
 				if (this.$faqelize.database == "local") {
 					if (is_dev) {
-						dbloc = "database_encrypted.json";
+						dbloc = "database.json";
 					} else {
 						dbloc = this.$faqelize.encryptDatabase
 							? "database_encrypted.json"
@@ -253,6 +253,11 @@
 					}
 				} else {
 					dbloc = this.$faqelize.database.toString();
+				}
+				if (this.$faqelize.acceptDatabaseParameter) {
+					if (this.$route.query[this.$faqelize.databaseParameterKey]) {
+						dbloc = this.$route.query[this.$faqelize.databaseParameterKey];
+					}
 				}
 				try {
 					content = await axios.get(dbloc);
