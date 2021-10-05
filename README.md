@@ -4,6 +4,10 @@
 🖤 Try it out: <a href="https://ilyich.ru/Faqelize/" target="_blank">Faqelize Demo</a> with password: <code>1234</code>
 </center>
 
+## Files to setup
+- ./**faqelize.config.js**
+- ./src/i18n/**{language_code}.js**
+- ./public/**database.json**
 
 ## Project setup
 ```
