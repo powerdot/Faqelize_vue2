@@ -26,7 +26,6 @@ module.exports = {
             maskIcon: './icons/safari-pinned-tab.svg',
             msTileImage: './icons/mstile-150x150.png'
         },
-        workboxPluginMode: "InjectManifest",
         manifestOptions: {
             "background_color": "#FFFFFF",
             "display": "standalone",

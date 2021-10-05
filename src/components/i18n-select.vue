@@ -63,6 +63,9 @@
 </script>
 
 <style lang="scss" scoped>
+	.i18holder {
+		// margin-left: auto;
+	}
 	.language_picker {
 		width: 100%;
 		padding: 20px 0px;
@@ -95,6 +98,7 @@
 			position: relative;
 		}
 		.globe {
+			margin-left: auto;
 			display: block;
 			// position: absolute;
 			// right: 0px;

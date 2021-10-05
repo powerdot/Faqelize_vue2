@@ -1,5 +1,5 @@
 <template>
-	<div class="holder" @click.self="close" v-if="show">
+	<div class="holder" v-if="show">
 		<div class="popup">
 			<h3>Сохрани на рабочий стол 😏</h3>
 			<div class="content">
@@ -24,8 +24,74 @@
 						<div class="iosPlusIcon">+</div>
 					</div>
 				</template>
-				<template v-if="system == 'android' && browser == 'chrome'">
-					chrome on android
+				<template v-if="system == 'android'">
+					<template v-if="browser == 'chrome'">
+						Нажми на
+						<div class="chromeMenuIcon">
+							<i class="bi bi-three-dots-vertical"></i>
+						</div>
+						справа сверху и нажми на
+						<div class="chromeButton">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+							>
+								<path fill="none" d="M0 0h24v24H0V0z" />
+								<path
+									d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3c0 .55.45 1 1 1s1-.45 1-1V5h10v14H8v-1c0-.55-.45-1-1-1s-1 .45-1 1v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM11 15c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H6c-.55 0-1 .45-1 1s.45 1 1 1h2.59L3.7 14.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L10 11.41V14c0 .55.45 1 1 1z"
+								/>
+							</svg>
+							Добавить на гл. экран
+						</div>
+					</template>
+					<template v-if="browser == 'YaApp'">
+						Нажми на
+						<div class="chromeMenuIcon">
+							<i class="bi bi-three-dots-vertical"></i>
+						</div>
+						справа сверху и нажми на
+						<div class="androidButton">Добавить ярлык</div>
+					</template>
+					<template v-if="browser == 'YaBrowser'">
+						Нажми на
+						<div class="chromeMenuIcon">
+							<i class="bi bi-three-dots-vertical"></i>
+						</div>
+						справа снизу и нажми на
+						<div class="androidButton">Добавить ярлык</div>
+					</template>
+					<template v-if="browser == 'Firefox'">
+						Нажми на
+						<div class="chromeMenuIcon">
+							<i class="bi bi-three-dots-vertical"></i>
+						</div>
+						справа снизу и нажми на
+						<div class="androidButton">На домашний экран</div>
+					</template>
+					<template v-if="browser == 'Opera'">
+						Нажми на
+						<div class="chromeMenuIcon">
+							<i class="bi bi-three-dots-vertical"></i>
+						</div>
+						справа сверху и нажми на
+						<div class="chromeButton">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+							>
+								<path fill="none" d="M0 0h24v24H0V0z" />
+								<path
+									d="M18 1.01L8 1c-1.1 0-2 .9-2 2v3c0 .55.45 1 1 1s1-.45 1-1V5h10v14H8v-1c0-.55-.45-1-1-1s-1 .45-1 1v3c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM11 15c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H6c-.55 0-1 .45-1 1s.45 1 1 1h2.59L3.7 14.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L10 11.41V14c0 .55.45 1 1 1z"
+								/>
+							</svg>
+							Домашний экран
+						</div>
+					</template>
+					<template v-if="browser == 'MiuiBrowser'"> </template>
 				</template>
 			</div>
 			<button class="close" @click="close">Не хочу</button>
@@ -37,9 +103,11 @@
 	export default {
 		data() {
 			return {
-				system: "ios",
-				browser: "safari",
+				system: "",
+				browser: "",
+				ua: "",
 				show: false,
+				iapwa_key: "",
 			};
 		},
 		methods: {
@@ -60,8 +128,21 @@
 			},
 			getBrowser() {
 				var ua = navigator.userAgent;
+				this.ua = ua;
 				var isChrome = ua.indexOf("Chrome") > -1;
 				var isSafari = ua.indexOf("Safari") > -1;
+				let isYaApp = ua.indexOf("YaApp") > -1;
+				let isFirefox = ua.indexOf("Firefox") > -1;
+				let isOpera = ua.indexOf("OPR/") > -1;
+				let isUCBrowser = ua.indexOf("UCBrowser") > -1; // UCBrowser dosnt support pwa app linking
+				let isMiuiBrowser = ua.indexOf("MiuiBrowser") > -1; // MiuiBrowser dosnt support pwa app linking
+				let isYaBrowser = ua.indexOf("YaBrowser") > -1;
+				if (isYaApp) return "YaApp";
+				if (isFirefox) return "Firefox";
+				if (isOpera) return "Opera";
+				if (isMiuiBrowser) return "";
+				if (isYaBrowser) return "YaBrowser";
+				if (isUCBrowser) return "";
 				if (isChrome && isSafari) {
 					return "chrome";
 				} else if (isSafari) {
@@ -71,11 +152,20 @@
 			close() {
 				this.$emit("close");
 				console.log("close");
+				localStorage.setItem(this.iapwa_key, "no");
+				this.show = false;
 			},
 		},
 		mounted() {
-			this.show = this.$faqelize.installAsPWA;
+			this.iapwa_key = "iapwa_faqelize_" + document.location.host;
 			this.init();
+			let iOSIsInstalled = window.navigator.standalone === true;
+			this.show =
+				this.$faqelize.installAsPWA &&
+				localStorage.getItem(this.iapwa_key) != "no" &&
+				this.system &&
+				this.browser &&
+				!iOSIsInstalled;
 		},
 	};
 </script>
@@ -135,6 +225,38 @@
 				font-weight: bold;
 				font-family: Arial;
 				color: #363636;
+			}
+
+			.chromeMenuIcon {
+				display: inline-block;
+				background: #3c3c3c;
+				color: white;
+				height: 21px;
+				width: 22px;
+				padding-top: 1px;
+				border-radius: 4px;
+			}
+
+			.chromeButton {
+				background: #eee;
+				display: inline-block;
+				padding: 10px 30px;
+				margin-top: 5px;
+				border-radius: 7px;
+				padding-left: 15px;
+				svg {
+					height: 20px;
+					margin-bottom: -4px;
+					margin-right: 5px;
+				}
+			}
+
+			.androidButton {
+				background: #eee;
+				display: inline-block;
+				padding: 10px 30px;
+				margin-top: 5px;
+				border-radius: 7px;
 			}
 
 			.close {

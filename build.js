@@ -4,8 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { exit } = require("process");
 const readline = require('readline');
-
-console.log("BUILD ARGS", process.argv[2])
+const faqelize = require("./faqelize.config.js");
 
 function askQuestion(query) {
     const rl = readline.createInterface({
@@ -21,6 +20,10 @@ function askQuestion(query) {
 (async () => {
     switch (process.argv[2]) {
         case 'build':
+            if (!faqelize.encodeDatabase) {
+                console.log("Building without encoding. Check config file: ./faqelize.config.js");
+                break;
+            }
             let algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
             let password = "";
             if (process.argv[3]) {
@@ -36,6 +39,7 @@ function askQuestion(query) {
             break;
 
         case 'clean':
+            if (!faqelize.encodeDatabase) break;
             if (fs.existsSync(path.resolve(__dirname, "docs/database.json"))) {
                 fs.unlinkSync(path.resolve(__dirname, "docs/database.json"));
             }

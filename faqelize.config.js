@@ -25,5 +25,7 @@ module.exports = {
     encodeDatabase: true,
 
     // Suggest install as app on mobile devices.
-    installAsPWA: false,
+    installAsPWA: true,
+
+    logo: '',
 };

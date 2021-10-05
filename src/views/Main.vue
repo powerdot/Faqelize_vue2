@@ -376,6 +376,7 @@
 		right: 25px;
 		top: 20px;
 		width: 150px;
+		z-index: 4;
 	}
 
 	.password_holder {
