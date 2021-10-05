@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Faqelize/precache-manifest.5b9b6b8583a95765221b15534cbe4b9c.js"
+  "/Faqelize/precache-manifest.17900afc5998e295d8935612fafca559.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "faqelize"});
+workbox.core.setCacheNameDetails({prefix: "Faqelize"});
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
