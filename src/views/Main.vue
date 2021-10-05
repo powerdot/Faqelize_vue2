@@ -50,13 +50,21 @@
 						{{ $t("PINNED") }}
 					</div>
 				</div>
-				<input
-					type="text"
-					:placeholder="$t('SEARCH')"
-					@keyup="search"
-					v-model="search_query"
-					v-if="selected_area == 'all'"
-				/>
+				<template v-if="selected_area == 'all'">
+					<input
+						type="text"
+						:placeholder="$t('SEARCH')"
+						@keyup="search"
+						v-model="search_query"
+					/>
+					<button
+						v-if="search_query != ''"
+						class="clear"
+						@click="clearSearchQuery"
+					>
+						<i class="bi bi-x"></i>
+					</button>
+				</template>
 			</div>
 
 			<div class="areas">
@@ -70,13 +78,6 @@
 						/>
 					</template>
 					<template v-else>
-						<button
-							v-if="search_query != ''"
-							class="clear"
-							@click="clearSearchQuery"
-						>
-							<i class="bi bi-x"></i>
-						</button>
 						<results
 							:display_ids="results.map((x) => x.id)"
 							:list="database"
@@ -222,7 +223,13 @@
 				let content;
 				let dbloc = "";
 				if (this.$faqelize.database == "local") {
-					dbloc = is_dev ? "database.json" : "database_encrypted.json"; // TODO REMOVE ! ?
+					if (is_dev) {
+						dbloc = "database.json";
+					} else {
+						dbloc = this.$faqelize.encodeDatabase
+							? "database_encrypted.json"
+							: "database.json";
+					}
 				} else {
 					dbloc = this.$faqelize.database.toString();
 				}

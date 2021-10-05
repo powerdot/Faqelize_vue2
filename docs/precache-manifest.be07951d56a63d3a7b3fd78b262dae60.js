@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7e176e10dbcf901eb64e",
-    "url": "/Faqelize/css/app.05657177.css"
+    "revision": "b24e4b531b9c254ee289",
+    "url": "/Faqelize/css/app.bc022230.css"
   },
   {
     "revision": "4dd1e7ed70b060f1bcbb",
@@ -64,12 +64,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Faqelize/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "0ea6e29616d50d0afaa850eed5ff74d5",
+    "revision": "6e5fe8a8c043daa9477840706b57746a",
     "url": "/Faqelize/index.html"
   },
   {
-    "revision": "7e176e10dbcf901eb64e",
-    "url": "/Faqelize/js/app.62411504.js"
+    "revision": "b24e4b531b9c254ee289",
+    "url": "/Faqelize/js/app.31455778.js"
   },
   {
     "revision": "4dd1e7ed70b060f1bcbb",

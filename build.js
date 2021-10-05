@@ -22,7 +22,7 @@ function askQuestion(query) {
         case 'build':
             if (!faqelize.encodeDatabase) {
                 console.log("Building without encoding. Check config file: ./faqelize.config.js");
-                break;
+                return exit(0);
             }
             let algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
             let password = "";
@@ -39,7 +39,12 @@ function askQuestion(query) {
             break;
 
         case 'clean':
-            if (!faqelize.encodeDatabase) break;
+            if (!faqelize.encodeDatabase) {
+                if (fs.existsSync(path.resolve(__dirname, "docs/database_encrypted.json"))) {
+                    fs.unlinkSync(path.resolve(__dirname, "docs/database_encrypted.json"));
+                }
+                return exit(0);
+            }
             if (fs.existsSync(path.resolve(__dirname, "docs/database.json"))) {
                 fs.unlinkSync(path.resolve(__dirname, "docs/database.json"));
             }
