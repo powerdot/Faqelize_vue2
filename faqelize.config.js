@@ -25,7 +25,7 @@ module.exports = {
     savePassword: true,
 
     // Encrypt database.json with password while building.
-    encodeDatabase: false,
+    encodeDatabase: true,
 
     // Suggest install as app on mobile devices.
     installAsPWA: true,

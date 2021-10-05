@@ -111,11 +111,6 @@
 			};
 		},
 		methods: {
-			init() {
-				this.system = this.getSystem();
-				this.browser = this.getBrowser();
-				console.log(this.system, this.browser);
-			},
 			getSystem() {
 				var ua = navigator.userAgent;
 				var isAndroid = ua.indexOf("Android") > -1;
@@ -151,14 +146,14 @@
 			},
 			close() {
 				this.$emit("close");
-				console.log("close");
 				localStorage.setItem(this.iapwa_key, "no");
 				this.show = false;
 			},
 		},
 		mounted() {
 			this.iapwa_key = "iapwa_faqelize_" + document.location.host;
-			this.init();
+			this.system = this.getSystem();
+			this.browser = this.getBrowser();
 			let iOSIsInstalled = window.navigator.standalone === true;
 			this.show =
 				this.$faqelize.installAsPWA &&

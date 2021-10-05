@@ -295,7 +295,6 @@
 		mounted() {
 			this.usePins = this.$faqelize.usePins;
 			this.load();
-			console.log(this.$faqelize);
 		},
 	};
 </script>
