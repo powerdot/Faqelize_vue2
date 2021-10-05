@@ -4,6 +4,9 @@
 🖤 Try it out: <a href="https://ilyich.ru/Faqelize/" target="_blank">Faqelize Demo</a> with password: <code>1234</code>
 </center>
 
+иногда бывает что нужно сделать фак для закрытых целей.
+но не хочется ставить докер или настраивать сервер.
+
 ## Files to setup
 - ./**faqelize.config.js**
 - ./src/i18n/**{language_code}.js**

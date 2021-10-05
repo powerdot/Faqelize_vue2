@@ -9,7 +9,7 @@ let prompt = require('password-prompt');
 (async () => {
     switch (process.argv[2]) {
         case 'build':
-            if (!faqelize.encodeDatabase) {
+            if (!faqelize.encryptDatabase) {
                 console.log("Building without encoding. Check config file: ./faqelize.config.js");
                 return exit(0);
             }
@@ -28,7 +28,7 @@ let prompt = require('password-prompt');
             break;
 
         case 'clean':
-            if (!faqelize.encodeDatabase) {
+            if (!faqelize.encryptDatabase) {
                 if (fs.existsSync(path.resolve(__dirname, "docs/database_encrypted.json"))) {
                     fs.unlinkSync(path.resolve(__dirname, "docs/database_encrypted.json"));
                 }

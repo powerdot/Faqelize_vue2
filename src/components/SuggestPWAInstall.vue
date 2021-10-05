@@ -101,6 +101,12 @@
 
 <script>
 	export default {
+		props: {
+			autoInit: {
+				type: Boolean,
+				default: true,
+			},
+		},
 		data() {
 			return {
 				system: "",
@@ -149,18 +155,21 @@
 				localStorage.setItem(this.iapwa_key, "no");
 				this.show = false;
 			},
+			init() {
+				this.iapwa_key = "iapwa_faqelize_" + document.location.host;
+				this.system = this.getSystem();
+				this.browser = this.getBrowser();
+				let iOSIsInstalled = window.navigator.standalone === true;
+				this.show =
+					this.$faqelize.installAsPWA &&
+					localStorage.getItem(this.iapwa_key) != "no" &&
+					this.system &&
+					this.browser &&
+					!iOSIsInstalled;
+			},
 		},
 		mounted() {
-			this.iapwa_key = "iapwa_faqelize_" + document.location.host;
-			this.system = this.getSystem();
-			this.browser = this.getBrowser();
-			let iOSIsInstalled = window.navigator.standalone === true;
-			this.show =
-				this.$faqelize.installAsPWA &&
-				localStorage.getItem(this.iapwa_key) != "no" &&
-				this.system &&
-				this.browser &&
-				!iOSIsInstalled;
+			if (this.autoInit) this.init();
 		},
 	};
 </script>

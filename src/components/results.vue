@@ -156,6 +156,9 @@
 <style lang="scss" scoped>
 	// mobile media query
 	@media only screen and (max-width: 600px) {
+		.results .result {
+			border-left: 0;
+		}
 		.results .result .pin {
 			font-size: 20px;
 			padding: 0;

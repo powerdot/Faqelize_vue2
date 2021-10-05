@@ -21,17 +21,37 @@ module.exports = {
     // Enable pins.
     usePins: true,
 
-    // Autosave password in localstorage.
+    // Autosave password hash in localstorage.
     savePassword: true,
 
     // Encrypt database.json with password while building.
-    encodeDatabase: true,
+    encryptDatabase: true,
 
     // Suggest install as app on mobile devices.
     installAsPWA: true,
 
+    // Set logotype image.
+    // Can be bool and string.
+    // If string is empty - default logo from ./public/img/logo.png
+    // If string is not empty - image from string (URL or base64)
+    // If bool is true - default logo from ./public/img/logo.png
+    // If bool is false - no logo
     logo: '',
 
     // Public path for production.
-    productionPublicPath: '/Faqelize/'
+    productionPublicPath: '/Faqelize/',
+
+    // Accept login by &password URL parameter.
+    // ! Can be unsecure.
+    // But if you use it, better send sha256 password hash instead of raw password.
+    acceptPasswordParameter: true,
+
+    // Determines URL parameter for password.
+    passwordParameterKey: 'password',
+
+    // Accept logo by &logo URL parameter.
+    acceptLogoParameter: true,
+
+    // Determines URL parameter for logo.
+    logoParameterKey: 'logo',
 };

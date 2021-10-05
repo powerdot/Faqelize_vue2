@@ -1,39 +1,39 @@
 <template>
 	<div>
-		<div class="loading_holder" v-if="loading && !database_not_found">
-			<loader />
-		</div>
-		<subPage ref="subPage" :pageTitle="pageTitle">
+		<!-- Loading view -->
+		<Loader v-if="loading && !database_not_found" />
+
+		<!-- Database error view -->
+		<DatabaseError v-if="loading && database_not_found" />
+
+		<!-- Password view -->
+		<EnterPassword
+			v-if="!loading && !password_applied"
+			@password-entered="checkPassword"
+			:logo="getLogo"
+		/>
+
+		<!-- Answer page component -->
+		<SubPage ref="subPage" :pageTitle="pageTitle">
 			<component :is="pageToOpen" />
-		</subPage>
-		<div class="setup_database_holder" v-if="loading && database_not_found">
-			<h2>{{ $t("DATABASE_NOT_FOUND") }}</h2>
-			<p v-html="$t('DATABASE_SETUP')"></p>
-			<a href="#" target="_blank">{{ $t("DATABASE_MORE_INFO") }}</a>
-		</div>
-		<div class="password_holder" v-if="!loading && !password_applied">
-			<div class="title">{{ $t("ENTER_PASSWORD") }}</div>
-			<input
-				type="password"
-				name="password"
-				v-model="password"
-				@keyup.enter="checkPassword"
-				autocomplete="off"
-				data-password-autocomplete="off"
-			/>
-		</div>
+		</SubPage>
+
+		<!-- Control panel -->
 		<div class="right_panel">
-			<button
-				class="logout"
-				@click="logout"
+			<logout
 				v-if="!loading && password_applied && database_is_encrypted"
-			>
-				<div class="label">{{ $t("LOGOUT") }}</div>
-				<i class="bi bi-x-lg"></i>
-			</button>
+				@logout="logout"
+			/>
 			<i18nSelect />
 		</div>
+
+		<!-- Main view -->
 		<div class="search_holder" v-if="!loading && password_applied">
+			<div
+				class="logo"
+				v-if="getLogo"
+				:style="{ backgroundImage: `url(${getLogo})` }"
+			></div>
 			<div class="menu_and_search">
 				<div class="menu">
 					<div
@@ -70,7 +70,7 @@
 			<div class="areas">
 				<div class="area" v-if="selected_area == 'all'">
 					<template v-if="!search_query">
-						<results
+						<Results
 							:list="database"
 							:nothing_text="$t('DATABASE_IS_EMPTY')"
 							@pin="pin"
@@ -78,7 +78,7 @@
 						/>
 					</template>
 					<template v-else>
-						<results
+						<Results
 							:display_ids="results.map((x) => x.id)"
 							:list="database"
 							:nothing_text="search_query ? $t('NO_RESULTS') : ''"
@@ -89,7 +89,7 @@
 				</div>
 				<div class="area" v-if="selected_area == 'searchbar'"></div>
 				<div class="area" v-if="selected_area == 'pinned'">
-					<results
+					<Results
 						:display_ids="pinned_ids"
 						:list="database"
 						:nothing_text="$t('NO_PINNED')"
@@ -99,53 +99,58 @@
 				</div>
 			</div>
 		</div>
-		<SuggestPWAInstall />
+
+		<!-- PWA install promotion component -->
+		<SuggestPWAInstall ref="SuggestPWAInstall" :autoInit="false" />
 	</div>
 </template>
 
 <script>
 	import axios from "axios";
-	const crypto = require("crypto");
 	const MiniSearch = require("minisearch");
 	let miniSearch;
 	let localstorage_password_key = `faqelize_${document.location.hostname}_password`;
 	let localstorage_pinned_key = `faqelize_${document.location.hostname}_pinned`;
 
+	let crypto = require("../components/crypto");
+
 	import i18nSelect from "../components/i18n-select.vue";
-	import results from "../components/results.vue";
-	import loader from "../components/loader.vue";
-	import subPage from "../components/subPage.vue";
+	import logout from "../components/logout.vue";
+	import Results from "../components/results.vue";
+	import Loader from "../components/loader.vue";
+	import SubPage from "../components/subPage.vue";
 	import SuggestPWAInstall from "../components/SuggestPWAInstall.vue";
-
-	function decryptDatabase(value, password) {
-		try {
-			let algorithm = "aes256";
-			let key = hashPassword(password);
-			let decipher = crypto.createDecipher(algorithm, key);
-			let decrypted =
-				decipher.update(value[1], "hex", "utf8") + decipher.final("utf8");
-			return JSON.parse(decrypted);
-		} catch (error) {
-			return false;
-		}
-	}
-
-	function hashPassword(password) {
-		if (password.length == 32) return password;
-		return crypto
-			.createHash("sha256")
-			.update(password)
-			.digest("base64")
-			.substr(0, 32);
-	}
+	import DatabaseError from "../components/DatabaseError.vue";
+	import EnterPassword from "../components/EnterPassword.vue";
 
 	export default {
 		components: {
 			i18nSelect,
-			results,
-			loader,
-			subPage,
+			logout,
+			Results,
+			Loader,
+			SubPage,
 			SuggestPWAInstall,
+			DatabaseError,
+			EnterPassword,
+		},
+		computed: {
+			getLogo() {
+				let logo_config = this.$faqelize.logo;
+				let default_logo_path = "./img/logo.png";
+				if (this.$faqelize.acceptLogoParameter) {
+					let logo = this.$route.query[this.$faqelize.logoParameterKey];
+					if (logo) return logo;
+				}
+				if (typeof logo_config == "string") {
+					if (!logo_config) return default_logo_path;
+					return logo_config;
+				}
+				if (typeof logo_config == "boolean") {
+					if (logo_config) return default_logo_path;
+					return false;
+				}
+			},
 		},
 		data() {
 			return {
@@ -166,11 +171,26 @@
 		},
 		methods: {
 			async load() {
+				this.loading = true;
+
 				let saved_password = this.$faqelize.savePassword
 					? localStorage.getItem(localstorage_password_key)
 					: "";
-				if (saved_password) this.password = saved_password;
-				this.loading = true;
+				if (saved_password) {
+					this.password = saved_password;
+				}
+
+				// Accept login by &password URL parameter.
+				if (this.$faqelize.acceptPasswordParameter) {
+					let password = this.$route.query[this.$faqelize.passwordParameterKey];
+					if (password) {
+						this.password = password;
+						let query = Object.assign({}, this.$route.query);
+						delete query[this.$faqelize.passwordParameterKey];
+						this.$router.replace({ query });
+					}
+				}
+
 				let database = await this.fetchDB();
 				if (database.error) {
 					console.error("Can't fetch database", database.error);
@@ -179,13 +199,12 @@
 						this.database_not_found = true;
 					return;
 				}
-				this.loading = false;
 				this.password_applied = true;
 				this.database_is_encrypted = database.encrypted;
 				if (database.encrypted && this.$faqelize.savePassword)
 					localStorage.setItem(
 						localstorage_password_key,
-						hashPassword(this.password)
+						crypto.hashPassword(this.password)
 					);
 				if (!database.value[0].id) {
 					for (let doc_i in database.value) database.value[doc_i].id = doc_i;
@@ -211,6 +230,8 @@
 					let doc = this.database.find((x) => x.id == id);
 					if (doc) doc.pinned = true;
 				}
+				this.loading = false;
+				this.$refs.SuggestPWAInstall.init();
 			},
 			search() {
 				let results = miniSearch.search(this.search_query);
@@ -224,9 +245,9 @@
 				let dbloc = "";
 				if (this.$faqelize.database == "local") {
 					if (is_dev) {
-						dbloc = "database.json";
+						dbloc = "database_encrypted.json";
 					} else {
-						dbloc = this.$faqelize.encodeDatabase
+						dbloc = this.$faqelize.encryptDatabase
 							? "database_encrypted.json"
 							: "database.json";
 					}
@@ -242,7 +263,7 @@
 				if (value) {
 					if (value[0] == "encrypted") {
 						encrypted = true;
-						value = decryptDatabase(value, this.password);
+						value = crypto.decryptDatabase(value, this.password);
 						if (!value) {
 							return { error: "INVALID_PASSWORD", encrypted };
 						}
@@ -250,10 +271,9 @@
 				}
 				return { value, encrypted };
 			},
-			checkPassword(e) {
-				if (e.keyCode == 13) {
-					this.load();
-				}
+			checkPassword(password) {
+				this.password = password.toString();
+				this.load();
 			},
 			logout() {
 				this.loading = false;
@@ -300,14 +320,6 @@
 </script>
 
 <style lang="scss" scoped>
-	.loading_holder {
-		text-align: left;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
 	.menu_and_search {
 		position: sticky;
 		top: 0;
@@ -356,24 +368,15 @@
 			border-radius: unset;
 			margin: unset;
 		}
-	}
 
-	.logout {
-		width: 100%;
-		padding: 9px 0px;
-		border-radius: 8px;
-		color: gray;
-		border: 1px solid #d8d8d8;
-		background: white;
-		cursor: pointer;
-		margin-bottom: 10px;
-		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-		i {
-			display: none;
-		}
-		&:hover {
-			color: red;
-			border-color: red;
+		.logo {
+			height: 40px;
+			width: 50%;
+			background-position: center left;
+			background-size: contain;
+			background-repeat: no-repeat;
+			margin-left: 10px;
+			margin-top: -16px;
 		}
 	}
 
@@ -383,26 +386,6 @@
 		top: 20px;
 		width: 150px;
 		z-index: 4;
-	}
-
-	.password_holder {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		.title {
-			margin-bottom: 10px;
-			cursor: default;
-			font-size: 10pt;
-			text-align: center;
-		}
-		input {
-			border: none;
-			border-bottom: 1px solid #ddd;
-			background: #f9f9f9;
-			padding: 10px 20px;
-			outline: none;
-		}
 	}
 
 	.clear {
@@ -426,25 +409,14 @@
 	// mobile query
 	@media only screen and (max-width: 600px) {
 		.right_panel {
-			right: 20px;
+			right: 10px;
 			z-index: 3;
 			display: flex;
 			justify-content: flex-start;
 			align-items: self-start;
 			flex-direction: row-reverse;
 		}
-		.logout {
-			width: 40px;
-			height: 40px;
-			border: none;
-			margin-left: 10px;
-			i {
-				display: block;
-			}
-			.label {
-				display: none;
-			}
-		}
+
 		.clear {
 			opacity: 1;
 			padding: 0;

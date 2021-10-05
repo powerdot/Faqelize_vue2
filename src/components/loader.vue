@@ -1,10 +1,20 @@
 
 <template>
-	<div class="dot-falling"></div>
+	<div class="loading_holder">
+		<div class="dot-falling"></div>
+	</div>
 </template>
 
 <style lang="scss" scoped>
 	// https://nzbin.github.io/three-dots/
+
+	.loading_holder {
+		text-align: left;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 
 	$main-color: #d1d1d1;
 
