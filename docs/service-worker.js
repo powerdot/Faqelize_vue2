@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Faqelize/precache-manifest.535efdacb5f3e3b65887d9547369f1b8.js"
+  "/Faqelize/precache-manifest.bd9aa377a6263bf855605b3f13a6a734.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "Faqelize"});

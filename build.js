@@ -3,19 +3,8 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const { exit } = require("process");
-const readline = require('readline');
 const faqelize = require("./faqelize.config.js");
-
-function askQuestion(query) {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-    return new Promise(resolve => rl.question(query, ans => {
-        rl.close();
-        resolve(ans);
-    }))
-};
+let prompt = require('password-prompt');
 
 (async () => {
     switch (process.argv[2]) {
@@ -29,7 +18,7 @@ function askQuestion(query) {
             if (process.argv[3]) {
                 password = process.argv[3];
             } else {
-                password = await askQuestion("Enter the password: ")
+                let password = await prompt('Enter the password: ')
             }
             let key = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32);
             let text = fs.readFileSync(path.resolve(__dirname, "public/database.json"), "utf8");
