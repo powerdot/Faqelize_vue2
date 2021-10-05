@@ -18,7 +18,10 @@ module.exports = {
     // Enable pins.
     usePins: true,
 
-    // Encrypt database.json with password by build script.
+    // Autosave password in localstorage.
+    savePassword: true,
+
+    // Encrypt database.json with password while building.
     encodeDatabase: true,
 
     // Suggest install as app on mobile devices.

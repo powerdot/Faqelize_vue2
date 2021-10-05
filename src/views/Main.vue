@@ -28,37 +28,39 @@
 				@click="logout"
 				v-if="!loading && password_applied && database_is_encrypted"
 			>
-				{{ $t("LOGOUT") }}
+				<div class="label">{{ $t("LOGOUT") }}</div>
+				<i class="bi bi-x-lg"></i>
 			</button>
 			<i18nSelect />
 		</div>
-		<!-- <div :class="{ sideholder: true, showrs }"> -->
-		<!-- <div class="leftside"> -->
 		<div class="search_holder" v-if="!loading && password_applied">
-			<div class="menu">
-				<div
-					:class="{ menu_item: true, selected: selected_area == 'all' }"
-					@click="change_area('all')"
-				>
-					{{ $t("ALL_DATABASE") }}
+			<div class="menu_and_search">
+				<div class="menu">
+					<div
+						:class="{ menu_item: true, selected: selected_area == 'all' }"
+						@click="change_area('all')"
+					>
+						{{ $t("ALL_DATABASE") }}
+					</div>
+					<div
+						:class="{ menu_item: true, selected: selected_area == 'pinned' }"
+						@click="change_area('pinned')"
+						v-if="usePins"
+					>
+						{{ $t("PINNED") }}
+					</div>
 				</div>
-				<div
-					:class="{ menu_item: true, selected: selected_area == 'pinned' }"
-					@click="change_area('pinned')"
-					v-if="usePins"
-				>
-					{{ $t("PINNED") }}
-				</div>
+				<input
+					type="text"
+					:placeholder="$t('SEARCH')"
+					@keyup="search"
+					v-model="search_query"
+					v-if="selected_area == 'all'"
+				/>
 			</div>
 
 			<div class="areas">
 				<div class="area" v-if="selected_area == 'all'">
-					<input
-						type="text"
-						:placeholder="$t('SEARCH')"
-						@keyup="search"
-						v-model="search_query"
-					/>
 					<template v-if="!search_query">
 						<results
 							:list="database"
@@ -96,17 +98,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- </div> -->
-		<!-- <div class="rightside"> -->
-		<!-- <results
-					:display_ids="pinned_ids"
-					:list="database"
-					:nothing_text="$t('NO_PINNED')"
-					@pin="pin"
-					@open="openItem"
-				/> -->
-		<!-- </div> -->
-		<!-- </div> -->
 		<SuggestPWAInstall />
 	</div>
 </template>
@@ -157,7 +148,6 @@
 		},
 		data() {
 			return {
-				showrs: false,
 				results: [],
 				database: [],
 				search_query: "",
@@ -175,7 +165,9 @@
 		},
 		methods: {
 			async load() {
-				let saved_password = localStorage.getItem(localstorage_password_key);
+				let saved_password = this.$faqelize.savePassword
+					? localStorage.getItem(localstorage_password_key)
+					: "";
 				if (saved_password) this.password = saved_password;
 				this.loading = true;
 				let database = await this.fetchDB();
@@ -189,7 +181,7 @@
 				this.loading = false;
 				this.password_applied = true;
 				this.database_is_encrypted = database.encrypted;
-				if (database.encrypted)
+				if (database.encrypted && this.$faqelize.savePassword)
 					localStorage.setItem(
 						localstorage_password_key,
 						hashPassword(this.password)
@@ -302,42 +294,21 @@
 </script>
 
 <style lang="scss" scoped>
-	.sideholder {
-		display: flex;
-		.leftside {
-			width: 100%;
-			transition: 1s ease-in-out all;
-		}
-		.rightside {
-			width: 0;
-			overflow: hidden;
-			background: #fff;
-			transition: 1s ease-in-out all;
-			position: fixed;
-			top: 0;
-			right: 0;
-			height: 100vh;
-			.results {
-				margin-left: 30px;
-				width: 320px;
-			}
-		}
-		&.showrs {
-			.rightside {
-				width: 350px;
-			}
-			.leftside {
-				width: calc(100% - 350px);
-			}
-		}
-	}
-
 	.loading_holder {
 		text-align: left;
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+	}
+
+	.menu_and_search {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		padding-top: 10px;
+		margin-bottom: 20px;
+		background: white;
 	}
 
 	.menu {
@@ -370,12 +341,14 @@
 		margin: 0 auto;
 		margin-top: 40px;
 		input {
-			margin-bottom: 20px;
 			padding: 10px 10px;
 			border: none;
 			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 			font-size: 16pt;
 			width: calc(100% - 20px);
+			-webkit-appearance: none;
+			border-radius: unset;
+			margin: unset;
 		}
 	}
 
@@ -389,6 +362,9 @@
 		cursor: pointer;
 		margin-bottom: 10px;
 		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+		i {
+			display: none;
+		}
 		&:hover {
 			color: red;
 			border-color: red;
@@ -442,9 +418,56 @@
 <style lang="scss" scoped>
 	// mobile query
 	@media only screen and (max-width: 600px) {
+		.right_panel {
+			right: 20px;
+			z-index: 3;
+			display: flex;
+			justify-content: flex-start;
+			align-items: self-start;
+			flex-direction: row-reverse;
+		}
+		.logout {
+			width: 40px;
+			height: 40px;
+			border: none;
+			margin-left: 10px;
+			i {
+				display: block;
+			}
+			.label {
+				display: none;
+			}
+		}
 		.clear {
 			opacity: 1;
 			padding: 0;
+		}
+
+		.search_holder {
+			width: 100%;
+		}
+
+		.menu_and_search {
+			background: rgba(255, 255, 255, 0.7);
+			-webkit-backdrop-filter: saturate(180%) blur(20px);
+			backdrop-filter: saturate(180%) blur(20px);
+			padding: 0px 0px;
+			padding-top: 5px;
+		}
+		.search_holder input {
+			padding: 10px 20px;
+			width: calc(100% - 40px);
+			outline: none;
+		}
+		.menu {
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+	}
+
+	@media only screen and (max-width: 320px) {
+		.search_holder {
+			margin-top: 70px;
 		}
 	}
 </style>

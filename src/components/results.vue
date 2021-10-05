@@ -21,6 +21,11 @@
 			</div>
 			<span class="answer">
 				{{ typeof item.a == "string" ? item.a : item.a.subText || "" }}
+				<template v-if="typeof item.a == 'object'">
+					<template v-if="item.a.type == 'html'">
+						<div v-html="item.a.html"></div>
+					</template>
+				</template>
 			</span>
 			<template v-if="typeof item.a == 'object'">
 				<template v-if="item.a.type == 'page'">

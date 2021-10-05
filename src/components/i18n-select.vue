@@ -1,5 +1,5 @@
 <template>
-	<div v-if="activate">
+	<div v-if="activate" class="i18holder">
 		<button class="globe" @click="show = !show">
 			<i class="bi bi-globe2"></i>
 		</button>
@@ -91,11 +91,14 @@
 <style lang="scss" scoped>
 	// mobile styles
 	@media (max-width: 1250px) {
+		.i18holder {
+			position: relative;
+		}
 		.globe {
 			display: block;
-			position: absolute;
-			right: 0px;
-			top: 0px;
+			// position: absolute;
+			// right: 0px;
+			// top: 0px;
 			padding: 10px;
 			border-radius: 50%;
 			background-color: #fff;
@@ -105,6 +108,8 @@
 			height: 40px;
 			width: 40px;
 			line-height: 20px;
+			z-index: 3;
+			-webkit-appearance: none;
 			i {
 				font-size: 20px;
 			}
@@ -114,12 +119,14 @@
 			position: absolute;
 			right: 0px;
 			top: 0px;
-			width: 100%;
-			padding: 20px 0px;
+			min-width: 140px;
+			width: fit-content;
+			padding: 20px 10px;
 			border-radius: 20px;
 			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 			text-align: center;
 			background-color: #fff;
+			z-index: 4;
 			.label {
 				color: gray;
 				cursor: default;

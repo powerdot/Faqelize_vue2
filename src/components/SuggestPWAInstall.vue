@@ -74,6 +74,7 @@
 			},
 		},
 		mounted() {
+			this.show = this.$faqelize.installAsPWA;
 			this.init();
 		},
 	};
