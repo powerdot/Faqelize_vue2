@@ -1,7 +1,8 @@
-let fc = require('../faqelize.config.js')
+let config = require('../faqelize.config.js')
 
 export default {
     install: (app, options) => {
-        app.config.globalProperties.$faqelize = fc;
-    }
+        app.config.globalProperties.$faqelize = config;
+    },
+    config
 }

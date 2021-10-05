@@ -32,81 +32,81 @@
 			</button>
 			<i18nSelect />
 		</div>
-		<div :class="{ sideholder: true, showrs }">
-			<div class="leftside">
-				<div class="search_holder" v-if="!loading && password_applied">
-					<div class="menu">
-						<div
-							:class="{ menu_item: true, selected: selected_area == 'all' }"
-							@click="change_area('all')"
-						>
-							{{ $t("ALL_DATABASE") }}
-						</div>
-						<div
-							:class="{ menu_item: true, selected: selected_area == 'pinned' }"
-							@click="change_area('pinned')"
-							v-if="usePins"
-						>
-							{{ $t("PINNED") }}
-						</div>
-					</div>
-
-					<div class="areas">
-						<div class="area" v-if="selected_area == 'all'">
-							<input
-								type="text"
-								:placeholder="$t('SEARCH')"
-								@keyup="search"
-								v-model="search_query"
-							/>
-							<template v-if="!search_query">
-								<results
-									:list="database"
-									:nothing_text="$t('DATABASE_IS_EMPTY')"
-									@pin="pin"
-									@open="openItem"
-								/>
-							</template>
-							<template v-else>
-								<button
-									v-if="search_query != ''"
-									class="clear"
-									@click="clearSearchQuery"
-								>
-									<i class="bi bi-x"></i>
-								</button>
-								<results
-									:display_ids="results.map((x) => x.id)"
-									:list="database"
-									:nothing_text="search_query ? $t('NO_RESULTS') : ''"
-									@pin="pin"
-									@open="openItem"
-								/>
-							</template>
-						</div>
-						<div class="area" v-if="selected_area == 'searchbar'"></div>
-						<div class="area" v-if="selected_area == 'pinned'">
-							<results
-								:display_ids="pinned_ids"
-								:list="database"
-								:nothing_text="$t('NO_PINNED')"
-								@pin="pin"
-								@open="openItem"
-							/>
-						</div>
-					</div>
+		<!-- <div :class="{ sideholder: true, showrs }"> -->
+		<!-- <div class="leftside"> -->
+		<div class="search_holder" v-if="!loading && password_applied">
+			<div class="menu">
+				<div
+					:class="{ menu_item: true, selected: selected_area == 'all' }"
+					@click="change_area('all')"
+				>
+					{{ $t("ALL_DATABASE") }}
+				</div>
+				<div
+					:class="{ menu_item: true, selected: selected_area == 'pinned' }"
+					@click="change_area('pinned')"
+					v-if="usePins"
+				>
+					{{ $t("PINNED") }}
 				</div>
 			</div>
-			<div class="rightside">
-				<results
+
+			<div class="areas">
+				<div class="area" v-if="selected_area == 'all'">
+					<input
+						type="text"
+						:placeholder="$t('SEARCH')"
+						@keyup="search"
+						v-model="search_query"
+					/>
+					<template v-if="!search_query">
+						<results
+							:list="database"
+							:nothing_text="$t('DATABASE_IS_EMPTY')"
+							@pin="pin"
+							@open="openItem"
+						/>
+					</template>
+					<template v-else>
+						<button
+							v-if="search_query != ''"
+							class="clear"
+							@click="clearSearchQuery"
+						>
+							<i class="bi bi-x"></i>
+						</button>
+						<results
+							:display_ids="results.map((x) => x.id)"
+							:list="database"
+							:nothing_text="search_query ? $t('NO_RESULTS') : ''"
+							@pin="pin"
+							@open="openItem"
+						/>
+					</template>
+				</div>
+				<div class="area" v-if="selected_area == 'searchbar'"></div>
+				<div class="area" v-if="selected_area == 'pinned'">
+					<results
+						:display_ids="pinned_ids"
+						:list="database"
+						:nothing_text="$t('NO_PINNED')"
+						@pin="pin"
+						@open="openItem"
+					/>
+				</div>
+			</div>
+		</div>
+		<!-- </div> -->
+		<!-- <div class="rightside"> -->
+		<!-- <results
 					:display_ids="pinned_ids"
 					:list="database"
 					:nothing_text="$t('NO_PINNED')"
 					@pin="pin"
 					@open="openItem"
-				/>
-			</div>
-		</div>
+				/> -->
+		<!-- </div> -->
+		<!-- </div> -->
 		<SuggestPWAInstall />
 	</div>
 </template>
@@ -228,10 +228,14 @@
 				let encrypted = false;
 				let is_dev = process.env.NODE_ENV == "development";
 				let content;
+				let dbloc = "";
+				if (this.$faqelize.database == "local") {
+					dbloc = is_dev ? "database.json" : "database_encrypted.json"; // TODO REMOVE ! ?
+				} else {
+					dbloc = this.$faqelize.database.toString();
+				}
 				try {
-					content = await axios.get(
-						is_dev ? "database.json" : "database_encrypted.json" // TODO REMOVE !
-					);
+					content = await axios.get(dbloc);
 				} catch (error) {
 					return { error: "DATABASE_NOT_FOUND" };
 				}

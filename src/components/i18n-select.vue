@@ -32,32 +32,15 @@
 				show: false,
 				lang: "en",
 				langs: [],
-				localeNames: {
-					en: "English",
-					fr: "Français",
-					de: "Deutsch",
-					es: "Español",
-					it: "Italiano",
-					pt: "Português",
-					ru: "Русский",
-					zh: "中文",
-					ja: "日本語",
-					ko: "한국어",
-					ar: "العربية",
-					tr: "Türkçe",
-					vi: "Tiếng Việt",
-				},
+				localeNames: {},
 			};
 		},
 		mounted() {
 			this.activate = this.$faqelize.showLanguageSwitcher;
 
-			let avaliableLocales = this.$i18n.availableLocales;
-			for (let al of avaliableLocales) {
-				this.langs.push({
-					code: al,
-					name: this.localeNames[al] || al,
-				});
+			for (let lang of this.$faqelize.languages) {
+				this.localeNames[lang.code] = lang.name;
+				this.langs.push(lang);
 			}
 
 			// localStorage local setting

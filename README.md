@@ -1,6 +1,8 @@
-![Banner](assets/banner.jpg)
+<img src="assets/banner.jpg" alt="drawing" width="800"/>
 
-🖤 Try it out: [Faqelize Demo](https://ilyich.ru/Faqelize/) with password: `1234`
+<center>
+🖤 Try it out: <a href="https://ilyich.ru/Faqelize/" target="_blank">Faqelize Demo</a> with password: <code>1234</code>
+</center>
 
 
 ## Project setup

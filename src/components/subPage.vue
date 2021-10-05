@@ -107,6 +107,9 @@
 				}
 			}
 		}
+		.body {
+			padding: 0px 30px;
+		}
 	}
 
 	@keyframes animOpen {
