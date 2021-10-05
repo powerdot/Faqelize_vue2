@@ -51,7 +51,5 @@ function askQuestion(query) {
             break;
     }
 
-    console.log("BUILD SCRIPT DONE")
-
     exit(0);
 })()

@@ -1,4 +1,4 @@
-// vue.config.js
+const faqelize = require("./faqelize.config.js");
 
 /**
  * @type {import('@vue/cli-service').ProjectOptions}
@@ -14,7 +14,7 @@ module.exports = {
         : '/',
 
     pwa: {
-        name: 'Faqelize',
+        name: faqelize.title,
         themeColor: '#FFFFFF',
         msTileColor: '#FFFFFF',
         appleMobileWebAppCapable: 'yes',
@@ -78,8 +78,8 @@ module.exports = {
                     "type": "image/svg+xml"
                 }
             ],
-            "name": "Faqelize",
-            "short_name": "Faqelize",
+            "name": faqelize.title,
+            "short_name": faqelize.title,
             "start_url": "/",
             "theme_color": "#FFFFFF",
         }

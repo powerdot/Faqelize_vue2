@@ -9,7 +9,9 @@ import './registerServiceWorker'
 let app = createApp(App)
 
 import ifc from './installFaqelize';
-app.use(ifc)
+app.use(ifc);
+
+document.title = ifc.config.title;
 
 let i18nMessages = {};
 for (let lang of ifc.config.languages) {

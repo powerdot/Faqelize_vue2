@@ -1,4 +1,7 @@
 module.exports = {
+    // App title
+    title: "Faqelize",
+
     // Database location:
     // 'local'
     // or any link 'https://my.s3.storage.io/bucket/secret_database.json'
