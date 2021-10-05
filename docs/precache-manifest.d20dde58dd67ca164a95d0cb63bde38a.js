@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e9c550c86d141584512e",
+    "revision": "ffdcc4602b52e00aa3e4",
     "url": "/Faqelize/css/app.a008c91a.css"
   },
   {
@@ -64,19 +64,19 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Faqelize/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "3ce5ba37be615a296c9cf43659fb82e9",
+    "revision": "0cab6f0210556a61bf3c3e800db61a27",
     "url": "/Faqelize/index.html"
   },
   {
-    "revision": "e9c550c86d141584512e",
-    "url": "/Faqelize/js/app.48750a48.js"
+    "revision": "ffdcc4602b52e00aa3e4",
+    "url": "/Faqelize/js/app.d446e503.js"
   },
   {
     "revision": "4dd1e7ed70b060f1bcbb",
     "url": "/Faqelize/js/chunk-vendors.fc810b47.js"
   },
   {
-    "revision": "bd10c88188bf98f40779a2373d965f9e",
+    "revision": "d9be00c0016eff0c39e10036045b4502",
     "url": "/Faqelize/manifest.json"
   },
   {

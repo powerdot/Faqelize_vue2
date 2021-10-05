@@ -10,7 +10,7 @@ module.exports = {
 
     // relative link for assets
     publicPath: process.env.NODE_ENV === 'production'
-        ? '/Faqelize/'
+        ? (faqelize.productionPublicPath || '/')
         : '/',
 
     pwa: {
@@ -80,7 +80,7 @@ module.exports = {
             ],
             "name": faqelize.title,
             "short_name": faqelize.title,
-            "start_url": "/",
+            "start_url": "./",
             "theme_color": "#FFFFFF",
         }
     }

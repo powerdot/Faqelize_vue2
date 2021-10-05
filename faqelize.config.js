@@ -31,4 +31,7 @@ module.exports = {
     installAsPWA: true,
 
     logo: '',
+
+    // Public path for production.
+    productionPublicPath: '/Faqelize/'
 };
