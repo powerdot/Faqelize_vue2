@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Faqelize/database.json"
   },
   {
-    "revision": "84ae655603c71b3862c54d36fd04ed1b",
+    "revision": "717c2bb235be292dc60f2a4de3ab958a",
     "url": "/Faqelize/database_encrypted.json"
   },
   {

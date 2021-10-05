@@ -18,7 +18,7 @@ let prompt = require('password-prompt');
             if (process.argv[3]) {
                 password = process.argv[3];
             } else {
-                let password = await prompt('Enter the password: ')
+                password = await prompt('Enter the password: ')
             }
             let key = crypto.createHash('sha256').update(password).digest('base64').substr(0, 32);
             let text = fs.readFileSync(path.resolve(__dirname, "public/database.json"), "utf8");
