@@ -7,7 +7,7 @@
 			class="result"
 			v-for="item of local_list"
 			:key="'result' + item.id"
-			@click="open(item)"
+			@click="open($event, item)"
 		>
 			<button
 				:class="{ pin: true, pinned: item.pinned }"
@@ -58,10 +58,18 @@
 				}
 				this.local_list = this.list;
 			},
-			open(item) {
-				if (typeof item.a == "string") return;
-				if (item.a.type != "page") return;
+			open(e, item) {
+				if (typeof item.a == "string") return this.expandAnswer(e);
+				if (item.a.type != "page") return this.expandAnswer(e);
 				this.$emit("open", item);
+			},
+			expandAnswer(e) {
+				for (let el of e.path) {
+					if (el.classList.contains("result")) {
+						el.querySelector(".answer").classList.toggle("open");
+						return;
+					}
+				}
 			},
 		},
 		mounted() {
@@ -104,6 +112,16 @@
 			}
 			.answer {
 				white-space: pre-line;
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				&.open {
+					display: block;
+					-webkit-line-clamp: unset;
+					-webkit-box-orient: unset;
+					overflow: visible;
+				}
 			}
 			.pin {
 				position: absolute;

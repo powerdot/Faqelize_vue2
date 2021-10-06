@@ -1,18 +1,18 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a1096c0ddbd3b70c2892",
-    "url": "/Faqelize/css/app.ee3efdc8.css"
+    "revision": "89a8875685a443b6d102",
+    "url": "/Faqelize/css/app.7fc42b86.css"
   },
   {
     "revision": "80cf18e1604ffc21003f",
     "url": "/Faqelize/css/chunk-vendors.56fe28ac.css"
   },
   {
-    "revision": "c67d5d624cf2377aa86b20bc9a75cae8",
+    "revision": "ca65f6f26ed91b52284b05d4c66bd1e2",
     "url": "/Faqelize/database.json"
   },
   {
-    "revision": "717c2bb235be292dc60f2a4de3ab958a",
+    "revision": "2d91670f1c92622fccd6b9503cbad88e",
     "url": "/Faqelize/database_encrypted.json"
   },
   {
@@ -28,12 +28,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Faqelize/img/logo.png"
   },
   {
-    "revision": "b8ed9a6409dff0b0333f531af2c157ec",
+    "revision": "7f1f86bd712b85bc0538d586aa4ba9e2",
     "url": "/Faqelize/index.html"
   },
   {
-    "revision": "a1096c0ddbd3b70c2892",
-    "url": "/Faqelize/js/app.9d8dad93.js"
+    "revision": "89a8875685a443b6d102",
+    "url": "/Faqelize/js/app.6a419239.js"
   },
   {
     "revision": "80cf18e1604ffc21003f",

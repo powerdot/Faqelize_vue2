@@ -178,7 +178,11 @@
 					? localStorage.getItem(localstorage_password_key)
 					: "";
 
-				if (window.navigator.standalone && this.$faqelize.savePassword) {
+				if (
+					window.navigator.standalone &&
+					this.$faqelize.savePassword &&
+					!saved_password
+				) {
 					let cache_password = await cacheStorage.get("saved_password");
 					if (cache_password) {
 						saved_password = cache_password;
@@ -441,9 +445,9 @@
 		}
 
 		.menu_and_search {
-			background: rgba(255, 255, 255, 0.7);
-			-webkit-backdrop-filter: saturate(180%) blur(20px);
-			backdrop-filter: saturate(180%) blur(20px);
+			background: rgba(255, 255, 255, 1);
+			// -webkit-backdrop-filter: saturate(180%) blur(20px);
+			// backdrop-filter: saturate(180%) blur(20px);
 			padding: 0px 0px;
 			padding-top: 5px;
 		}
