@@ -51,19 +51,7 @@
 					</div>
 				</div>
 				<template v-if="selected_area == 'all'">
-					<input
-						type="text"
-						:placeholder="$t('SEARCH')"
-						@keyup="search"
-						v-model="search_query"
-					/>
-					<button
-						v-if="search_query != ''"
-						class="clear"
-						@click="clearSearchQuery"
-					>
-						<i class="bi bi-x"></i>
-					</button>
+					<Search @search="search" :placeholder="$t('SEARCH')" />
 				</template>
 			</div>
 
@@ -87,7 +75,6 @@
 						/>
 					</template>
 				</div>
-				<div class="area" v-if="selected_area == 'searchbar'"></div>
 				<div class="area" v-if="selected_area == 'pinned'">
 					<Results
 						:display_ids="pinned_ids"
@@ -113,7 +100,6 @@
 	let localstorage_pinned_key = `faqelize_${document.location.hostname}_pinned`;
 
 	let crypto = require("../components/crypto");
-	let cacheStorage = require("../components/cacheStorage");
 
 	import i18nSelect from "../components/i18n-select.vue";
 	import logout from "../components/logout.vue";
@@ -123,6 +109,7 @@
 	import SuggestPWAInstall from "../components/SuggestPWAInstall.vue";
 	import DatabaseError from "../components/DatabaseError.vue";
 	import EnterPassword from "../components/EnterPassword.vue";
+	import Search from "../components/Search.vue";
 
 	export default {
 		components: {
@@ -134,6 +121,7 @@
 			SuggestPWAInstall,
 			DatabaseError,
 			EnterPassword,
+			Search,
 		},
 		computed: {
 			getLogo() {
@@ -178,17 +166,6 @@
 					? localStorage.getItem(localstorage_password_key)
 					: "";
 
-				if (
-					window.navigator.standalone &&
-					this.$faqelize.savePassword &&
-					!saved_password
-				) {
-					let cache_password = await cacheStorage.get("saved_password");
-					if (cache_password) {
-						saved_password = cache_password;
-					}
-				}
-
 				if (saved_password) {
 					this.password = saved_password;
 				}
@@ -217,7 +194,6 @@
 				if (database.encrypted && this.$faqelize.savePassword) {
 					let password_hash = crypto.hashPassword(this.password);
 					localStorage.setItem(localstorage_password_key, password_hash);
-					await cacheStorage.set("saved_password", password_hash);
 				}
 				if (!database.value[0].id) {
 					for (let doc_i in database.value) database.value[doc_i].id = doc_i;
@@ -246,8 +222,9 @@
 				this.loading = false;
 				this.$refs.SuggestPWAInstall.init();
 			},
-			search() {
-				let results = miniSearch.search(this.search_query);
+			search(search_query = "") {
+				this.search_query = search_query;
+				let results = miniSearch.search(search_query);
 				this.results = results;
 			},
 			async fetchDB() {
@@ -376,16 +353,6 @@
 		max-width: 900px;
 		margin: 0 auto;
 		margin-top: 40px;
-		input {
-			padding: 10px 10px;
-			border: none;
-			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-			font-size: 16pt;
-			width: calc(100% - 20px);
-			-webkit-appearance: none;
-			border-radius: unset;
-			margin: unset;
-		}
 
 		.logo {
 			height: 40px;
@@ -405,22 +372,6 @@
 		width: 150px;
 		z-index: 4;
 	}
-
-	.clear {
-		position: absolute;
-		margin-left: -35px;
-		margin-top: 10px;
-		font-size: 20px;
-		background: unset;
-		border: unset;
-		outline: none;
-		cursor: pointer;
-		opacity: 0.5;
-		color: black;
-		&:hover {
-			opacity: 1;
-		}
-	}
 </style>
 
 <style lang="scss" scoped>
@@ -435,19 +386,12 @@
 			flex-direction: row-reverse;
 		}
 
-		.clear {
-			opacity: 1;
-			padding: 0;
-		}
-
 		.search_holder {
 			width: 100%;
 		}
 
 		.menu_and_search {
 			background: rgba(255, 255, 255, 1);
-			// -webkit-backdrop-filter: saturate(180%) blur(20px);
-			// backdrop-filter: saturate(180%) blur(20px);
 			padding: 0px 0px;
 			padding-top: 5px;
 		}
