@@ -293,7 +293,6 @@
 				}
 
 				this.$forceUpdate();
-				console.log(this.pinned_ids);
 				localStorage.setItem(
 					localstorage_pinned_key,
 					JSON.stringify(this.pinned_ids)
