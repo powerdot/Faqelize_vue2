@@ -52,6 +52,9 @@ module.exports = {
     // Determines URL parameter for password.
     passwordParameterKey: 'password',
 
+    // Clear password parameter from URL after login.
+    clearPasswordParameter: true,
+
     // Accept logo by &logo URL parameter.
     acceptLogoParameter: true,
 

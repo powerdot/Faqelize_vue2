@@ -175,9 +175,11 @@
 					let password = this.$route.query[this.$faqelize.passwordParameterKey];
 					if (password) {
 						this.password = password;
-						let query = Object.assign({}, this.$route.query);
-						delete query[this.$faqelize.passwordParameterKey];
-						this.$router.replace({ query });
+						if (this.$faqelize.clearPasswordParameter) {
+							let query = Object.assign({}, this.$route.query);
+							delete query[this.$faqelize.passwordParameterKey];
+							this.$router.replace({ query });
+						}
 					}
 				}
 
