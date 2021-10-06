@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "50228e6c972e103d6603",
-    "url": "/Faqelize/css/app.2915c11a.css"
+    "revision": "a1096c0ddbd3b70c2892",
+    "url": "/Faqelize/css/app.ee3efdc8.css"
   },
   {
-    "revision": "8f1b4b30fed047e2dec7",
+    "revision": "80cf18e1604ffc21003f",
     "url": "/Faqelize/css/chunk-vendors.56fe28ac.css"
   },
   {
@@ -28,16 +28,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Faqelize/img/logo.png"
   },
   {
-    "revision": "fbee31ddf40709af304afe6fd8fbf854",
+    "revision": "b8ed9a6409dff0b0333f531af2c157ec",
     "url": "/Faqelize/index.html"
   },
   {
-    "revision": "50228e6c972e103d6603",
-    "url": "/Faqelize/js/app.a10d43d3.js"
+    "revision": "a1096c0ddbd3b70c2892",
+    "url": "/Faqelize/js/app.9d8dad93.js"
   },
   {
-    "revision": "8f1b4b30fed047e2dec7",
-    "url": "/Faqelize/js/chunk-vendors.48c0efc1.js"
+    "revision": "80cf18e1604ffc21003f",
+    "url": "/Faqelize/js/chunk-vendors.308c1c3a.js"
   },
   {
     "revision": "155dc7abb2b9095deed488413571176a",

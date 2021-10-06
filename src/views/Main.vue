@@ -113,6 +113,7 @@
 	let localstorage_pinned_key = `faqelize_${document.location.hostname}_pinned`;
 
 	let crypto = require("../components/crypto");
+	let cacheStorage = require("../components/cacheStorage");
 
 	import i18nSelect from "../components/i18n-select.vue";
 	import logout from "../components/logout.vue";
@@ -176,6 +177,14 @@
 				let saved_password = this.$faqelize.savePassword
 					? localStorage.getItem(localstorage_password_key)
 					: "";
+
+				if (window.navigator.standalone && this.$faqelize.savePassword) {
+					let cache_password = await cacheStorage.get("saved_password");
+					if (cache_password) {
+						saved_password = cache_password;
+					}
+				}
+
 				if (saved_password) {
 					this.password = saved_password;
 				}
@@ -201,11 +210,11 @@
 				}
 				this.password_applied = true;
 				this.database_is_encrypted = database.encrypted;
-				if (database.encrypted && this.$faqelize.savePassword)
-					localStorage.setItem(
-						localstorage_password_key,
-						crypto.hashPassword(this.password)
-					);
+				if (database.encrypted && this.$faqelize.savePassword) {
+					let password_hash = crypto.hashPassword(this.password);
+					localStorage.setItem(localstorage_password_key, password_hash);
+					await cacheStorage.set("saved_password", password_hash);
+				}
 				if (!database.value[0].id) {
 					for (let doc_i in database.value) database.value[doc_i].id = doc_i;
 				}

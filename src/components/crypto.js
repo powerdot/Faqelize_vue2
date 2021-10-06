@@ -11,7 +11,7 @@ function decryptDatabase(value, password) {
     } catch (error) {
         return false;
     }
-}
+};
 
 function hashPassword(password) {
     if (password.length == 32) return password;
@@ -20,7 +20,7 @@ function hashPassword(password) {
         .update(password)
         .digest("base64")
         .substr(0, 32);
-}
+};
 
 module.exports = {
     decryptDatabase,
