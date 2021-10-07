@@ -43,7 +43,7 @@
 				this.isShow = true;
 				window.document.body.classList.add("no-scroll");
 				this.scrollY = window.pageYOffset;
-				if (animation) {
+				if (animation && this.$faqelize.answerPageOpeningAnimation) {
 					this.animOpen = true;
 				} else {
 					this.justOpen = true;

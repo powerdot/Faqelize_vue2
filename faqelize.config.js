@@ -69,5 +69,6 @@ module.exports = {
 
     // disaplay "page" icon on answer?
 
-    // subPage open animation?
+    // Animate opening for answer page.
+    answerPageOpeningAnimation: false,
 };
