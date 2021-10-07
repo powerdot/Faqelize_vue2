@@ -116,6 +116,7 @@
 				-webkit-line-clamp: 3;
 				-webkit-box-orient: vertical;
 				overflow: hidden;
+				padding-right: 20px;
 				&.open {
 					display: block;
 					-webkit-line-clamp: unset;
