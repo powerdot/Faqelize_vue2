@@ -66,4 +66,6 @@ module.exports = {
 
     // Determines URL parameter for database.
     databaseParameterKey: 'db',
+
+    // disaplay "page" icon on answer?
 };

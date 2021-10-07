@@ -284,7 +284,8 @@
 				this.selected_area = area;
 			},
 			pin({ id, pinned }) {
-				this.database[id].pinned = pinned;
+				let find = this.database.find((x) => x.id == id);
+				find.pinned = pinned;
 				if (pinned) {
 					if (this.pinned_ids.includes(id)) return;
 					this.pinned_ids.push(id);
