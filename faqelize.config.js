@@ -68,4 +68,6 @@ module.exports = {
     databaseParameterKey: 'db',
 
     // disaplay "page" icon on answer?
+
+    // subPage open animation?
 };
