@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="background" v-if="isShow" @click="close"></div>
-		<div class="subPage" :class="{ animOpen }" v-if="isShow">
+		<div class="subPage" :class="{ animOpen, justOpen }" v-if="isShow">
 			<div class="top">
 				<div class="title">{{ pageTitle }}</div>
 				<!-- close -->
@@ -23,6 +23,7 @@
 				isShow: false,
 				scrollY: null,
 				animOpen: false,
+				justOpen: false,
 			};
 		},
 		props: {
@@ -38,11 +39,15 @@
 				window.scrollTo(0, this.scrollY);
 				this.animOpen = false;
 			},
-			open() {
+			open({ animation = true } = {}) {
 				this.isShow = true;
 				window.document.body.classList.add("no-scroll");
 				this.scrollY = window.pageYOffset;
-				this.animOpen = true;
+				if (animation) {
+					this.animOpen = true;
+				} else {
+					this.justOpen = true;
+				}
 			},
 		},
 		unmounted() {
@@ -80,6 +85,10 @@
 			animation: animOpen 0.5s;
 			animation-fill-mode: forwards;
 			animation-timing-function: ease-out;
+		}
+
+		&.justOpen {
+			transform: translate(-50%, -50%);
 		}
 
 		.top {
@@ -137,6 +146,9 @@
 				animation: animOpen-mobile 0.5s;
 				animation-fill-mode: forwards;
 				animation-timing-function: ease-out;
+			}
+			&.justOpen {
+				transform: translate(0%, 0%);
 			}
 		}
 	}

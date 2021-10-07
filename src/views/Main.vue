@@ -223,6 +223,24 @@
 				}
 				this.loading = false;
 				this.$refs.SuggestPWAInstall.init();
+
+				this.openQuestion();
+			},
+			openQuestion() {
+				let id = this.$route.query.q;
+				if (id) {
+					let find = this.database.find((x) => x.id == id);
+					if (find) {
+						if (typeof find.a == "string") {
+						} else {
+							if (find.a.type == "page") {
+								this.pageToOpen = find.a.page;
+								this.pageTitle = find.q;
+								this.$refs.subPage.open({ animation: false });
+							}
+						}
+					}
+				}
 			},
 			search(search_query = "") {
 				this.search_query = search_query;
