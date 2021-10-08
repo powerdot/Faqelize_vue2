@@ -14,7 +14,7 @@
 		/>
 
 		<!-- Answer page component -->
-		<SubPage ref="subPage" :pageTitle="pageTitle">
+		<SubPage ref="subPage" :pageTitle="pageTitle" @closed="subPageClosed">
 			<component :is="pageToOpen" />
 		</SubPage>
 
@@ -234,9 +234,7 @@
 						if (typeof find.a == "string") {
 						} else {
 							if (find.a.type == "page") {
-								this.pageToOpen = find.a.page;
-								this.pageTitle = find.q;
-								this.$refs.subPage.open({ animation: false });
+								this.openItem(find);
 							}
 						}
 					}
@@ -325,6 +323,16 @@
 				this.pageToOpen = item.a.page.toString();
 				this.$refs.subPage.open();
 				this.pageTitle = item.q;
+				let query = Object.assign({}, this.$route.query);
+				if (query.q != item.id) {
+					query.q = item.id;
+					this.$router.replace({ query });
+				}
+			},
+			subPageClosed() {
+				let query = Object.assign({}, this.$route.query);
+				delete query.q;
+				this.$router.replace({ query });
 			},
 		},
 		mounted() {

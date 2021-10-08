@@ -38,6 +38,7 @@
 				window.document.body.classList.remove("no-scroll");
 				window.scrollTo(0, this.scrollY);
 				this.animOpen = false;
+				this.$emit("closed");
 			},
 			open({ animation = true } = {}) {
 				this.isShow = true;
@@ -93,6 +94,7 @@
 
 		.top {
 			background: #ededed;
+			height: 58px;
 
 			.title {
 				font-size: 12pt;
@@ -118,6 +120,8 @@
 		}
 		.body {
 			padding: 0px 30px;
+			overflow-y: scroll;
+			height: calc(100% - 58px);
 		}
 	}
 

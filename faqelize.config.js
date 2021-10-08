@@ -67,7 +67,8 @@ module.exports = {
     // Determines URL parameter for database.
     databaseParameterKey: 'db',
 
-    // disaplay "page" icon on answer?
+    // Display or hide icon of "page" type of answer.
+    displayPageIcon: true,
 
     // Animate opening for answer page.
     answerPageOpeningAnimation: false,

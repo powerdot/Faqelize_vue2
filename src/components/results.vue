@@ -27,7 +27,7 @@
 					</template>
 				</template>
 			</span>
-			<template v-if="typeof item.a == 'object'">
+			<template v-if="typeof item.a == 'object' && $faqelize.displayPageIcon">
 				<template v-if="item.a.type == 'page'">
 					<i class="bi bi-arrow-up-right-square page_result"></i>
 				</template>
