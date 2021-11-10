@@ -12,12 +12,10 @@
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
 		color: #2c3e50;
-		// margin-bottom: 40px;
 	}
 	body {
 		margin: 0;
 	}
-	// no scroll class
 	.no-scroll {
 		overflow: hidden;
 	}
