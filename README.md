@@ -3,6 +3,17 @@
 🤔 Sometimes it happens that you need to make a FAQ for closed purposes, but you don’t want to install docker or set up a server with a database.  
 🖤 Try it out: <a href="https://ilyich.ru/Faqelize/" target="_blank">Faqelize Demo</a> with password: <code>1234</code>
 
+## Features
+* Fully standalone solution
+* No need hosting (can be used with pages at GitHub)
+* Database encryption (AES-256)
+* Easy to setup without coding
+* Change logotype
+* Create i18n (2 preinstalled languages: English and Russian)
+* Database file can be hosted on dedicated bucket/server
+* PWA support
+* Flexible: database, password and logotype can be passed as URL parameters
+
 ## How to run
 * Download this project
 * Run <code>npm install</code>
